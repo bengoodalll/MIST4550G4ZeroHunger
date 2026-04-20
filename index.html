@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero Hunger — UN SDG 2 | MIST 4550 Group 4</title>
+  <meta name="description" content="A diagnosis of global food insecurity, 2000–2024. UN Sustainable Development Goal 2." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🌾</text></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
+
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" defer></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ── Navigation ──────────────────────────────────────── -->
+  <nav class="site-nav" aria-label="Site navigation">
+    <a href="#hero" class="nav-logo">SDG 2 · Zero Hunger</a>
+    <ul class="nav-links">
+      <li><a href="#intro">The Goal</a></li>
+      <li><a href="#chart1-wrapper">Hunger Trend</a></li>
+      <li><a href="#chart2">Food Waste</a></li>
+      <li><a href="#chart3">Stunting</a></li>
+      <li><a href="#cta">Act</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 1 — HERO
+         ══════════════════════════════════════════════════ -->
+    <section id="hero" class="section section--hero" aria-label="Hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+      <div class="hero-content">
+        <span class="hero-eyebrow">UN Sustainable Development Goal 2</span>
+
+        <h1 class="hero-headline" aria-label="Zero Hunger">
+          <span class="word"><span class="word-inner">Zero</span></span>
+          <span class="word"><span class="word-inner">Hunger</span></span>
+        </h1>
+
+        <p class="hero-subhead">
+          A diagnosis of global food insecurity, 2000–2024.
+        </p>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="chevron"></div>
+      </div>
+
+      <p class="hero-credit">MIST 4550 · Group 4 · Ben, Casey, Julia, Peyton, Sejal</p>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 2 — WHAT IS ZERO HUNGER
+         ══════════════════════════════════════════════════ -->
+    <section id="intro" class="section" aria-labelledby="intro-heading">
+      <div class="container">
+        <div class="two-col">
+          <div class="section-label">
+            <span class="section-number">01 / The Goal</span>
+            <h2 id="intro-heading">What is Zero Hunger?</h2>
+            <div class="amber-rule" aria-hidden="true"></div>
+          </div>
+          <div class="section-body">
+            <p>
+              The UN's Zero Hunger initiative aims to end hunger, achieve food security,
+              improve nutrition, and promote sustainable agriculture by 2030. It focuses
+              on ensuring that everyone has reliable access to sufficient, safe, and
+              nutritious food — while building more resilient and equitable food systems
+              worldwide.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 3 — PULL QUOTE / THE MESSAGE
+         ══════════════════════════════════════════════════ -->
+    <section id="message" class="section section--alt" aria-label="Central message">
+      <div class="container">
+        <div class="pull-quote">
+          <blockquote>
+            <!-- Words wrapped for staggered reveal -->
+            <span class="word">"While</span>
+            <span class="word">global</span>
+            <span class="word">hunger</span>
+            <span class="word">has</span>
+            <span class="word">declined,</span>
+            <span class="word">progress</span>
+            <span class="word">is</span>
+            <span class="word">uneven</span>
+            <span class="word">—</span>
+            <span class="word">and</span>
+            <span class="word">certain</span>
+            <span class="word">regions</span>
+            <span class="word">still</span>
+            <span class="word">face</span>
+            <span class="word"><em>severe</em></span>
+            <span class="word">food</span>
+            <span class="word">insecurity."</span>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 4 — PINNED LINE CHART (THE SIGNATURE MOMENT)
+         ══════════════════════════════════════════════════ -->
+    <div id="chart1-wrapper">
+      <div class="pinned-layout">
+        <!-- Left: sticky chart panel -->
+        <div class="chart-panel">
+          <p class="section-number" style="margin-bottom:0.75rem">02 / Hunger Trend</p>
+          <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);margin-bottom:1rem;color:var(--ink-0)">
+            Global Undernourishment, 2000–2024
+          </h2>
+          <div id="chart1-container" aria-label="Line chart of global undernourishment share, 2000 to 2024"></div>
+          <p class="chart-caption">% of world population undernourished · Source: Our World in Data</p>
+        </div>
+
+        <!-- Right: scrolling narrative + annotations -->
+        <div class="narrative-col">
+          <div class="annotation-card" aria-live="polite">
+            <p class="ann-year">2000 Baseline</p>
+            <p>12.7% of the global population — nearly 800 million people — were undernourished. Progress was already underway, driven by economic growth and improved agricultural productivity.</p>
+          </div>
+
+          <div class="annotation-card" aria-live="polite">
+            <p class="ann-year">2020 — COVID Disruption</p>
+            <p>The COVID-19 pandemic disrupted food systems globally, reversing years of progress. Hunger rose to 8.8%. Supply chain failures, income shocks, and conflict compounded the setback.</p>
+          </div>
+
+          <div class="annotation-card" aria-live="polite">
+            <p class="ann-year">2024 — Progress Stalls</p>
+            <p>By 2024, the rate sits at 8.2% — only a modest improvement from the pandemic peak. The decline has flattened. At this pace, the 2030 Zero Hunger target remains out of reach.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explainer below the pin -->
+    <section class="section section--alt" aria-labelledby="chart1-explainer-heading">
+      <div class="chart1-explainer">
+        <p class="section-number" style="margin-bottom:0.5rem">Chart 1 Takeaway</p>
+        <p>
+          From 2000 to 2024, the global share of undernourished people fell from 12.7% to 8.2% —
+          real progress over two decades. But the trend is not smooth. Around 2020, the COVID-19
+          pandemic pushed the rate back up to 8.8%, and improvement has slowed since. The long-term
+          direction is positive, but the recovery is fragile.
+        </p>
+        <p class="source-link" style="margin-top:0.75rem">
+          Source: <a href="https://ourworldindata.org/hunger-and-undernourishment" target="_blank" rel="noopener">Our World in Data, "Share of people who are undernourished"</a>
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 5 — FOOD WASTE PER CAPITA
+         ══════════════════════════════════════════════════ -->
+    <section id="chart2" class="section" aria-labelledby="chart2-heading">
+      <div class="container">
+        <div class="pull-stat" aria-label="Key statistic">
+          <p class="stat-label">Global food wasted in 2022</p>
+          <p class="big-number" aria-live="polite">1.05B+</p>
+          <p class="stat-label">tonnes — roughly 1/3 of all food produced</p>
+        </div>
+
+        <p class="section-number" style="margin-bottom:0.5rem">03 / Food Waste</p>
+        <h2 id="chart2-heading" style="font-size:clamp(1.6rem,3vw,2.5rem);margin-bottom:1.5rem">
+          Food Waste Per Capita by Region, 2022
+        </h2>
+
+        <div id="chart2-container" aria-label="Horizontal stacked bar chart of food waste per capita by UN SDG region, 2022"></div>
+
+        <div class="chart-explainer-row">
+          <div></div><!-- spacer for chart width alignment -->
+          <div class="explainer-text">
+            <p>
+              Food waste per capita in 2022, by SDG region, split across retail, out-of-home
+              consumption, and household. Sub-Saharan Africa tops the list — driven by limited
+              refrigeration, long and fragile supply chains, and a hot climate that accelerates
+              spoilage. The same region carries some of the highest per-capita hunger rates.
+              Investment in cold-chain and transport infrastructure may be the most direct route
+              from food grown to food eaten.
+            </p>
+            <p class="source-note">
+              Source: Our World in Data, "Food Waste Per Capita, 2022" (FAO + UNEP)
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 6 — CHILD STUNTING
+         ══════════════════════════════════════════════════ -->
+    <section id="chart3" class="section section--alt" aria-labelledby="chart3-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-number" style="margin-bottom:0.5rem">04 / Child Stunting</p>
+          <h2 id="chart3-heading">Child Stunting Rates by Region</h2>
+        </div>
+
+        <div id="chart3-container" aria-label="Bar chart showing child stunting rates by region, percentage of children under 5 affected"></div>
+
+        <div class="explainer-below">
+          <p>
+            Child stunting rates — long-term malnutrition that shapes physical growth, brain
+            development, and lifetime health — are starkly unequal across regions. In Southern
+            Asia and Sub-Saharan Africa, nearly 1 in 3 children are affected. In Europe and
+            North America, rates are an order of magnitude lower. Global averages hide this
+            divide. Targeted intervention in the most-affected regions matters more than
+            assuming progress is universal.
+          </p>
+          <p class="source-note" style="margin-top:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--ink-2)">
+            Source: <a href="https://data.unicef.org/topic/nutrition/malnutrition/" target="_blank" rel="noopener" style="color:var(--accent-wheat)">UNICEF, 2023 Joint Child Malnutrition Estimates</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 7 — UN IMAGE: OVERWEIGHT CHILDREN UNDER 5
+         ══════════════════════════════════════════════════ -->
+    <section class="section un-image-section" aria-labelledby="chart4-heading">
+      <div class="container">
+        <p class="section-number" style="margin-bottom:0.5rem;text-align:center">05 / Double Burden</p>
+        <h2 id="chart4-heading">Proportion of Overweight Children Under 5</h2>
+        <div class="image-plate">
+          <!-- Drop un-overweight-under5.png into /assets/ to replace this placeholder -->
+          <div class="placeholder-img" id="un-overweight-placeholder" aria-label="Chart: Proportion of overweight children under 5, 2012 and 2022 comparison by region">
+            <span>[ Image: assets/un-overweight-under5.png ]</span>
+            <span>Drop PNG into /assets/ to display</span>
+          </div>
+          <div class="plate-caption">
+            <p>
+              The share of children under 5 who are overweight has stagnated near 5.5% since 2012,
+              well short of the 2030 target of 3%. Malnutrition is not only a story of scarcity.
+            </p>
+            <p class="source">
+              Source: <a href="https://unstats.un.org/sdgs/report/2023/goal-02" target="_blank" rel="noopener">UN SDG Report 2023, Goal 2</a>
+            </p>
+          </div>
+        </div>
+        <p class="un-explainer">
+          Overweight and obesity — driven by access to cheap, calorie-dense food — coexist
+          with undernutrition. This "double burden" means that food systems must simultaneously
+          address scarcity and surplus, requiring policy responses that go beyond simply
+          increasing supply.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 8 — UN IMAGE: HIGH FOOD PRICES
+         ══════════════════════════════════════════════════ -->
+    <section class="section section--alt un-image-section" aria-labelledby="chart5-heading">
+      <div class="container">
+        <p class="section-number" style="margin-bottom:0.5rem;text-align:center">06 / Price Volatility</p>
+        <h2 id="chart5-heading">Countries Experiencing High Food Prices</h2>
+        <div class="image-plate">
+          <!-- Drop un-food-prices.png into /assets/ to replace this placeholder -->
+          <div class="placeholder-img" id="un-prices-placeholder" aria-label="Chart: Proportion of countries affected by moderately to abnormally high food prices, 2015–2021">
+            <span>[ Image: assets/un-food-prices.png ]</span>
+            <span>Drop PNG into /assets/ to display</span>
+          </div>
+          <div class="plate-caption">
+            <p>
+              The share of countries experiencing moderately to abnormally high food prices dropped
+              from 48.1% in 2020 to 21.5% in 2021 — still elevated versus pre-pandemic norms.
+            </p>
+            <p class="source">
+              Source: <a href="https://unstats.un.org/sdgs/report/2023/goal-02" target="_blank" rel="noopener">UN SDG Report 2023, Goal 2</a>
+            </p>
+          </div>
+        </div>
+        <p class="un-explainer">
+          Supply chain disruption, energy and transport costs, and political instability keep food
+          prices volatile. High prices hit the poorest households hardest — the same households
+          where undernourishment rates are already elevated.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 9 — CALL TO ACTION
+         ══════════════════════════════════════════════════ -->
+    <section id="cta" class="section" aria-labelledby="cta-heading">
+      <div class="container">
+
+        <div class="cta-headline">
+          <h2 id="cta-heading">
+            <span class="line">Progress is uneven.</span>
+            <span class="line">Action is not optional.</span>
+          </h2>
+        </div>
+
+        <p class="cta-subhead">
+          Progress toward Zero Hunger needs both global support and individual action.
+        </p>
+
+        <div class="action-cards" role="list">
+          <div class="action-card" role="listitem">
+            <h3>Stay Informed</h3>
+            <p>
+              Follow where hunger is most severe. The UN SDG 2 dashboard tracks global progress
+              in real time — data is the first step toward change.
+              <br /><br />
+              <a href="https://unstats.un.org/sdgs/goals/goal-02" target="_blank" rel="noopener">unstats.un.org/sdgs/goals/goal-02 →</a>
+            </p>
+          </div>
+          <div class="action-card" role="listitem">
+            <h3>Reduce Your Waste</h3>
+            <p>
+              Household waste is the largest per-capita category in wealthy economies.
+              Plan meals, store food well, use scraps. Small habits compound into a more
+              efficient food system.
+            </p>
+          </div>
+          <div class="action-card" role="listitem">
+            <h3>Support the Right Places</h3>
+            <p>
+              Donate to organizations delivering food directly in the most-affected regions.
+              <br /><br />
+              <a href="https://www.wfp.org" target="_blank" rel="noopener">World Food Programme →</a><br />
+              <a href="https://www.actionagainsthunger.org" target="_blank" rel="noopener">Action Against Hunger →</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Social posts in phone mockups -->
+        <div class="social-posts" aria-label="Social media posts by Peyton">
+          <div class="phone-mockup">
+            <div class="phone-frame">
+              <div class="phone-notch" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <!-- Drop post-1.png into /assets/ to replace -->
+                <div class="phone-placeholder" id="post1-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <rect width="32" height="32" rx="8" fill="#2E2820"/>
+                    <path d="M8 24l6-8 4 6 3-4 5 6H8z" fill="#E8A33D" opacity="0.6"/>
+                    <circle cx="22" cy="10" r="3" fill="#E8A33D" opacity="0.6"/>
+                  </svg>
+                  <span>Social Post 1</span>
+                  <span>assets/post-1.png</span>
+                </div>
+              </div>
+            </div>
+            <p class="phone-caption">Instagram Post — Peyton</p>
+          </div>
+
+          <div class="phone-mockup">
+            <div class="phone-frame">
+              <div class="phone-notch" aria-hidden="true"></div>
+              <div class="phone-screen">
+                <!-- Drop post-2.png into /assets/ to replace -->
+                <div class="phone-placeholder" id="post2-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <rect width="32" height="32" rx="8" fill="#2E2820"/>
+                    <path d="M8 24l6-8 4 6 3-4 5 6H8z" fill="#E8A33D" opacity="0.6"/>
+                    <circle cx="22" cy="10" r="3" fill="#E8A33D" opacity="0.6"/>
+                  </svg>
+                  <span>Social Post 2</span>
+                  <span>assets/post-2.png</span>
+                </div>
+              </div>
+            </div>
+            <p class="phone-caption">Instagram Post — Peyton</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <footer>
+    <p>MIST 4550 Energy Informatics &middot; Spring 2026 &middot; Group 4</p>
+    <p>Ben, Casey, Julia, Peyton, Sejal</p>
+    <p style="margin-top:0.5rem">
+      Data: Our World in Data &middot; UNICEF Joint Child Malnutrition Estimates &middot; UN Statistics Division
+    </p>
+    <p>Built for the "What else can we improve?" datastore assignment &middot; 2026-04-19</p>
+  </footer>
+
+  <!-- Image loader: swaps placeholders for real assets -->
+  <script type="module">
+    const assets = [
+      { id: 'un-overweight-placeholder', src: 'assets/un-overweight-under5.jpg', alt: 'Chart showing proportion of overweight children under 5, 2012 and 2022 by region' },
+      { id: 'un-prices-placeholder',     src: 'assets/un-food-prices.jpg',       alt: 'Chart showing proportion of countries affected by moderately to abnormally high food prices, 2015–2021' },
+      { id: 'post1-placeholder',         src: 'assets/post-1.png',               alt: 'Instagram story: Hunger isn\'t just about food — It\'s about access, cost, and distribution' },
+      { id: 'post2-placeholder',         src: 'assets/post-2.png',               alt: 'Instagram story: 600+ million people could face hunger by 2030 — The Zero Hunger goal is at risk' },
+    ];
+    for (const { id, src, alt } of assets) {
+      const placeholder = document.getElementById(id);
+      if (!placeholder) continue;
+      const img = new Image();
+      img.onload = () => {
+        img.alt = alt;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        placeholder.replaceWith(img);
+      };
+      img.src = src;
+    }
+  </script>
+
+  <!-- Main app — loaded after GSAP + D3 are ready -->
+  <script>
+    // Wait for deferred scripts then boot
+    window.addEventListener('load', () => {
+      import('./main.js').catch(err => console.error('[main.js]', err));
+    });
+  </script>
+
+</body>
+</html>
