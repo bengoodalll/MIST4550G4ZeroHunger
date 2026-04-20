@@ -1,6 +1,8 @@
 import { initChart as initUndernourishment, driveChart } from './charts/undernourishment.js';
 import { initChart as initFoodWaste, revealChart as revealFoodWaste } from './charts/food-waste.js';
 import { initChart as initStunting, revealChart as revealStunting } from './charts/stunting.js';
+import { initChart as initDoubleBurden, revealChart as revealDoubleBurden } from './charts/double-burden.js';
+import { initChart as initPriceVolatility, revealChart as revealPriceVolatility } from './charts/price-volatility.js';
 import { initRegionalGlobe } from './globe.js';
 
 const { gsap, ScrollTrigger, ScrollToPlugin } = window;
@@ -450,6 +452,38 @@ function initCTA() {
   });
 }
 
+// ── Section 7 — double burden ──────────────────────────────
+function initChart4() {
+  const container = document.getElementById('chart4-container');
+  if (!container) return;
+
+  requestAnimationFrame(() => {
+    initDoubleBurden(container);
+    ScrollTrigger.create({
+      trigger: '#chart4',
+      start: 'top 75%',
+      once: true,
+      onEnter() { revealDoubleBurden(container); },
+    });
+  });
+}
+
+// ── Section 8 — price volatility ──────────────────────────
+function initChart5() {
+  const container = document.getElementById('chart5-container');
+  if (!container) return;
+
+  requestAnimationFrame(() => {
+    initPriceVolatility(container);
+    ScrollTrigger.create({
+      trigger: '#chart5',
+      start: 'top 75%',
+      once: true,
+      onEnter() { revealPriceVolatility(container); },
+    });
+  });
+}
+
 // ── Boot ───────────────────────────────────────────────────
 function boot() {
   initSmoothScroll();  // wire smooth scroll before ScrollTrigger measures
@@ -462,6 +496,8 @@ function boot() {
   initChart1();    // synchronous pin setup; D3 renders immediately with fallback
   initChart2();    // async but uses revealWhenVisible
   initChart3();    // async but uses revealWhenVisible
+  initChart4();
+  initChart5();
   initRegionalGlobe();
   initCTA();
   initMouseEffects();
