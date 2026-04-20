@@ -122,6 +122,10 @@ export function initChart(container) {
   container._dbChart = { barGroups, y, H };
 }
 
+export function revealChart(container) {
+  if (!container._dbChart) return;
+  const { barGroups, y, H } = container._dbChart;
+  const gsap = window.gsap;
   if (!gsap) return;
 
   barGroups.each(function(d, i) {
