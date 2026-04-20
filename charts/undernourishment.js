@@ -21,7 +21,7 @@ async function loadData() {
   return FALLBACK;
 }
 
-function renderChart(container, data) {
+function renderChart(container, data, progress = container._chartProgress ?? 0) {
   const d3 = window.d3;
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -136,42 +136,26 @@ function renderChart(container, data) {
 
   // Expose animation handles for main.js scroll driver
   container._chart = { path, totalLength, band, x, y, data, g };
+  applyChartProgress(container, progress);
 }
 
 // Render with fallback immediately, then fetch live data and re-render if better.
 // Returns a promise that resolves AFTER the final render (live or fallback).
 export function initChart(container) {
   renderChart(container, FALLBACK);
-  // Show the 2000 baseline dot immediately — chart is never fully blank
-  const { driveChart } = { driveChart: (c, p) => {
-    if (!c._chart) return;
-    const { path, totalLength, band, g } = c._chart;
-    const drawLength = totalLength * (p * 0.02);  // tiny initial draw
-    path.attr('stroke-dashoffset', totalLength - drawLength);
-    g.select('.dot-2000').attr('opacity', p > 0 ? 1 : 0);
-    band.attr('opacity', 0);
-  }};
-  // Show the starting dot right away
-  if (container._chart) {
-    container._chart.g.select('.dot-2000').attr('opacity', 1);
-  }
 
   return loadData().then(liveData => {
     if (liveData !== FALLBACK) {
-      renderChart(container, liveData);
-      // Restore starting dot after re-render
-      if (container._chart) {
-        container._chart.g.select('.dot-2000').attr('opacity', 1);
-      }
+      renderChart(container, liveData, container._chartProgress ?? 0);
     }
     // main.js .then() fires here — AFTER the final render
   });
 }
 
-export function driveChart(container, progress) {
+function applyChartProgress(container, progress) {
   if (!container._chart) return;
-  const { path, totalLength, band, x, y, data, g } = container._chart;
-  const d3 = window.d3;
+  const { path, totalLength, band, data, g } = container._chart;
+  progress = Math.max(0, Math.min(1, progress));
 
   // Three steps over progress 0→1:
   // 0.0–0.4: draw 2000–2019 segment
@@ -197,10 +181,15 @@ export function driveChart(container, progress) {
   path.attr('stroke-dashoffset', totalLength - drawLength);
 
   // Dots
-  g.select('.dot-2000').attr('opacity', progress > 0.05 ? 1 : 0);
+  g.select('.dot-2000').attr('opacity', 1);
   g.select('.dot-2020').attr('opacity', progress > 0.45 ? Math.min((progress - 0.45) / 0.05, 1) : 0);
   g.select('.dot-2024').attr('opacity', progress > 0.75 ? Math.min((progress - 0.75) / 0.05, 1) : 0);
 
   // Band
   band.attr('opacity', progress > 0.75 ? Math.min((progress - 0.75) / 0.1, 1) * 0.12 : 0);
+}
+
+export function driveChart(container, progress) {
+  container._chartProgress = Math.max(0, Math.min(1, progress));
+  applyChartProgress(container, container._chartProgress);
 }

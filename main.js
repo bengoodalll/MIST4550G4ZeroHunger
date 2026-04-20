@@ -174,6 +174,34 @@ function initChart1() {
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const annotationCards = gsap.utils.toArray('#chart1-wrapper .annotation-card');
+  const annotationWindows = [
+    { start: 0.02, end: 0.42 },
+    { start: 0.42, end: 0.72 },
+    { start: 0.72, end: 1.1 },
+  ];
+
+  const clamp01 = value => Math.max(0, Math.min(1, value));
+  const smoothStep = (start, end, value) => {
+    const t = clamp01((value - start) / (end - start));
+    return t * t * (3 - 2 * t);
+  };
+  const setAnnotationProgress = progress => {
+    const fade = 0.05;
+    annotationCards.forEach((card, i) => {
+      const { start, end } = annotationWindows[i];
+      const fadeIn = smoothStep(start, start + fade, progress);
+      const fadeOut = i === annotationWindows.length - 1
+        ? 1
+        : 1 - smoothStep(end - fade, end, progress);
+      const opacity = clamp01(fadeIn * fadeOut);
+      gsap.set(card, {
+        opacity,
+        y: (1 - opacity) * 24,
+        pointerEvents: opacity > 0.9 ? 'auto' : 'none',
+      });
+    });
+  };
 
   // Create the ScrollTrigger pin SYNCHRONOUSLY so GSAP measures the
   // correct scroll position before any async work shifts things.
@@ -191,14 +219,10 @@ function initChart1() {
       scrub: 0.5,                 // faster scrub feels more responsive
       onUpdate(self) {
         driveChart(container, self.progress);
-        const cards = document.querySelectorAll('.annotation-card');
-        const thresholds = [0.05, 0.42, 0.72];
-        cards.forEach((card, i) => {
-          const show = self.progress >= thresholds[i] && self.progress < (thresholds[i + 1] || 1.1);
-          gsap.to(card, { opacity: show ? 1 : 0, y: show ? 0 : 24, duration: 0.3, overwrite: 'auto' });
-        });
+        setAnnotationProgress(self.progress);
       },
     });
+    setAnnotationProgress(pinnedST.progress);
     // Keep the wrapper below the hero in stacking context
     wrapper.style.zIndex = '0';
   }
@@ -209,9 +233,11 @@ function initChart1() {
       driveChart(container, 1);
       document.querySelectorAll('.annotation-card').forEach(card => {
         card.style.opacity = 1; card.style.transform = 'none';
+        card.style.pointerEvents = 'auto';
       });
     } else if (pinnedST) {
       driveChart(container, pinnedST.progress);
+      setAnnotationProgress(pinnedST.progress);
     }
   });
 }

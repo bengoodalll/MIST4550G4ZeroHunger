@@ -1,5 +1,5 @@
 /* ============================================================
-   Zero Hunger — MIST 4550 Group 4
+   Zero Hunger — MIST 4550 Group 3
    Palette: dark earthy, SDG 2 amber accent
    ============================================================ */
 
@@ -391,6 +391,34 @@ h1, h2, h3, .display {
   color: var(--ink-2);
 }
 .chart1-explainer .source-link a { color: var(--accent-wheat); }
+
+@media (min-width: 769px) {
+  #chart1-wrapper .pinned-layout {
+    height: 100vh;
+    align-items: center;
+  }
+
+  #chart1-wrapper .chart-panel {
+    position: relative;
+    top: auto;
+  }
+
+  #chart1-wrapper .narrative-col {
+    position: relative;
+    align-self: center;
+    min-height: 260px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #chart1-wrapper .annotation-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+  }
+}
 
 /* ═══════════════════════════════════════════════
    SECTION 5 — FOOD WASTE
