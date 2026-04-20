@@ -300,14 +300,90 @@ function initChart3() {
 function initMouseEffects() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
+  const supportsFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   const glow = document.createElement('div');
   glow.className = 'cursor-glow';
   document.body.appendChild(glow);
 
+  let siteCursor = null;
+  const interactiveSelector = [
+    'a',
+    'button',
+    '[role="button"]',
+    'input',
+    'select',
+    'textarea',
+    'summary',
+    '.bar-rect',
+    '.action-card',
+    '.globe-region-controls button',
+    '.globe-viewport',
+  ].join(',');
+  const dragSelector = '.globe-viewport, #regional-globe-canvas';
+
+  function scatterGlints(x, y) {
+    if (!supportsFinePointer) return;
+    for (let i = 0; i < 4; i += 1) {
+      const glint = document.createElement('span');
+      glint.className = 'cursor-glint';
+      glint.style.left = `${x}px`;
+      glint.style.top = `${y}px`;
+      glint.style.setProperty('--glint-x', `${(Math.random() - 0.5) * 42}px`);
+      glint.style.setProperty('--glint-y', `${-10 - Math.random() * 28}px`);
+      glint.style.setProperty('--glint-rot', `${-70 + Math.random() * 140}deg`);
+      document.body.appendChild(glint);
+      glint.addEventListener('animationend', () => glint.remove(), { once: true });
+    }
+  }
+
+  if (supportsFinePointer) {
+    document.body.classList.add('custom-cursor-enabled');
+
+    siteCursor = document.createElement('div');
+    siteCursor.className = 'site-cursor';
+    siteCursor.setAttribute('aria-hidden', 'true');
+    siteCursor.innerHTML = `
+      <span class="site-cursor__halo"></span>
+      <span class="site-cursor__marker"></span>
+    `;
+    document.body.appendChild(siteCursor);
+
+    const setCursorState = target => {
+      const closest = target?.closest?.bind(target);
+      siteCursor.classList.toggle('is-hovering', Boolean(closest?.(interactiveSelector)));
+      siteCursor.classList.toggle('is-drag-target', Boolean(closest?.(dragSelector)));
+    };
+
+    document.addEventListener('pointerdown', e => {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      siteCursor.classList.add('is-pressing');
+      siteCursor.classList.toggle('is-dragging', Boolean(e.target.closest?.(dragSelector)));
+      scatterGlints(e.clientX, e.clientY);
+    });
+    document.addEventListener('pointerup', () => {
+      siteCursor.classList.remove('is-pressing', 'is-dragging');
+    });
+    document.addEventListener('pointerover', e => setCursorState(e.target));
+    document.addEventListener('pointerout', e => {
+      if (!e.relatedTarget) siteCursor.classList.remove('is-visible', 'is-hovering', 'is-drag-target', 'is-dragging');
+    });
+    window.addEventListener('blur', () => {
+      siteCursor.classList.remove('is-visible', 'is-hovering', 'is-drag-target', 'is-dragging', 'is-pressing');
+    });
+  }
+
   let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
   let cx = tx, cy = ty;
-  document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  document.addEventListener('pointermove', e => {
+    if (e.pointerType && e.pointerType !== 'mouse') return;
+    tx = e.clientX;
+    ty = e.clientY;
+    if (siteCursor) {
+      siteCursor.classList.add('is-visible');
+      siteCursor.style.transform = `translate3d(${tx - 18}px, ${ty - 18}px, 0)`;
+    }
+  });
 
   const heroBg = document.querySelector('.hero-bg');
   function lerp(a, b, t) { return a + (b - a) * t; }
