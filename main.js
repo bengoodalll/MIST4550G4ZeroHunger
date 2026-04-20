@@ -1,6 +1,7 @@
 import { initChart as initUndernourishment, driveChart } from './charts/undernourishment.js';
 import { initChart as initFoodWaste, revealChart as revealFoodWaste } from './charts/food-waste.js';
 import { initChart as initStunting, revealChart as revealStunting } from './charts/stunting.js';
+import { initRegionalGlobe } from './globe.js';
 
 const { gsap, ScrollTrigger, ScrollToPlugin } = window;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -385,6 +386,7 @@ function boot() {
   initChart1();    // synchronous pin setup; D3 renders immediately with fallback
   initChart2();    // async but uses revealWhenVisible
   initChart3();    // async but uses revealWhenVisible
+  initRegionalGlobe();
   initCTA();
   initMouseEffects();
 

@@ -34,6 +34,7 @@
       <li><a href="#chart1-wrapper">Hunger Trend</a></li>
       <li><a href="#chart2">Food Waste</a></li>
       <li><a href="#chart3">Stunting</a></li>
+      <li><a href="#regional-globe">Globe</a></li>
       <li><a href="#cta">Act</a></li>
     </ul>
   </nav>
@@ -310,7 +311,96 @@
 
 
     <!-- ══════════════════════════════════════════════════
-         SECTION 9 — CALL TO ACTION
+         SECTION 9 — INTERACTIVE REGIONAL GLOBE
+         ══════════════════════════════════════════════════ -->
+    <section id="regional-globe" class="section regional-globe-section" aria-labelledby="regional-globe-heading">
+      <div class="container">
+        <div class="section-header globe-section-header">
+          <p class="section-number" style="margin-bottom:0.5rem">07 / Regional Globe</p>
+          <h2 id="regional-globe-heading">Regional Hunger Facts, Mapped</h2>
+          <p>
+            Click a colored region to open the facts already used in the charts:
+            undernourishment, food waste, child stunting, the double burden of malnutrition,
+            and food-price volatility.
+          </p>
+        </div>
+
+        <div class="globe-stage">
+          <div class="globe-viewport" aria-label="Interactive dot globe with clickable food security regions">
+            <canvas id="regional-globe-canvas"></canvas>
+            <p class="globe-hint">Drag to rotate · Click a region</p>
+          </div>
+
+          <aside class="globe-facts" id="globe-facts-panel" aria-live="polite">
+            <p class="globe-kicker">Selected region</p>
+            <h3 id="globe-region-name">Sub-Saharan Africa</h3>
+            <figure class="globe-region-media">
+              <img
+                id="globe-region-image"
+                src="https://images.unsplash.com/photo-1553775927-a071d5a6a39a?auto=format&fit=crop&w=900&q=80"
+                alt="Agricultural field used as a visual cue for Sub-Saharan Africa"
+                loading="lazy"
+              />
+              <figcaption id="globe-region-image-credit">Photo: Unsplash</figcaption>
+            </figure>
+            <p id="globe-region-summary">
+              Sub-Saharan Africa carries the highest food waste total in the chart and one
+              of the highest child stunting rates.
+            </p>
+
+            <div class="globe-stat-grid" aria-label="Regional chart facts">
+              <div>
+                <span>Food waste</span>
+                <strong id="globe-food-waste">160 kg</strong>
+              </div>
+              <div>
+                <span>Child stunting</span>
+                <strong id="globe-stunting">31.9%</strong>
+              </div>
+              <div>
+                <span>Global hunger</span>
+                <strong id="globe-undernourishment">8.2%</strong>
+              </div>
+            </div>
+
+            <ul class="globe-fact-list" id="globe-fact-list">
+              <li>Household waste accounts for 120 kg per capita per year.</li>
+              <li>Limited refrigeration, fragile supply chains, and heat accelerate spoilage.</li>
+              <li>Nearly 1 in 3 children are affected by long-term malnutrition.</li>
+            </ul>
+
+            <div class="globe-system-facts" aria-label="Global chart context">
+              <p>Global context</p>
+              <ul>
+                <li>Undernourishment fell from 12.7% in 2000 to 8.2% in 2024, but progress has slowed.</li>
+                <li>1.05B+ tonnes of food were wasted globally in 2022, roughly one-third of all food produced.</li>
+                <li>High food prices dropped from 48.1% of countries in 2020 to 21.5% in 2021, still above pre-pandemic norms.</li>
+                <li>Children under 5 who are overweight remain near 5.5%, short of the 2030 target of 3%.</li>
+              </ul>
+            </div>
+
+            <p class="globe-source-note">
+              Sources: Our World in Data, UNICEF Joint Child Malnutrition Estimates, UN SDG Report 2023. Region photos: Unsplash.
+            </p>
+          </aside>
+        </div>
+
+        <div class="globe-region-controls" role="list" aria-label="Select a region on the globe">
+          <button type="button" data-region="sub-saharan-africa" aria-pressed="true">Sub-Saharan Africa</button>
+          <button type="button" data-region="oceania" aria-pressed="false">Oceania</button>
+          <button type="button" data-region="north-africa-west-asia" aria-pressed="false">N. Africa &amp; W. Asia</button>
+          <button type="button" data-region="latin-america-caribbean" aria-pressed="false">Latin America &amp; Caribbean</button>
+          <button type="button" data-region="europe-north-america" aria-pressed="false">Europe &amp; N. America</button>
+          <button type="button" data-region="eastern-se-asia" aria-pressed="false">Eastern &amp; SE Asia</button>
+          <button type="button" data-region="central-southern-asia" aria-pressed="false">Central &amp; Southern Asia</button>
+          <button type="button" data-region="australia-new-zealand" aria-pressed="false">Australia &amp; New Zealand</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════
+         SECTION 10 — CALL TO ACTION
          ══════════════════════════════════════════════════ -->
     <section id="cta" class="section" aria-labelledby="cta-heading">
       <div class="container">
