@@ -13,8 +13,12 @@ async function loadData() {
       .map(cols => ({ year: +cols[2], value: +cols[3] }))
       .filter(d => d.year >= 2000 && d.year <= 2024 && !isNaN(d.value));
     if (world.length > 5) {
-    return FALLBACK;
+      return world;
+    }
+  } catch (err) {
+    console.warn('[undernourishment.js] Failed to fetch live data:', err.message);
   }
+  return FALLBACK;
 }
 
 function renderChart(container, data) {
